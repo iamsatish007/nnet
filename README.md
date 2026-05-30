@@ -141,6 +141,8 @@ nn_split_xy(&ds, 1, &X, &Y, &input_size, &output_size);
 
 // ... train ...
 
+// Free X and Y first (before nn_free_dataset clears num_rows)
+nn_free_xy(X, Y, ds.num_rows);
 nn_free_dataset(&ds);
 ```
 
@@ -206,6 +208,10 @@ void         nn_print_dataset_info(const nn_dataset_t *ds, int max_rows);
 void         nn_split_xy(nn_dataset_t *ds, int num_outputs,
                          float ***X, float ***Y,
                          int *input_size, int *output_size);
+
+// Free the X and Y arrays allocated by nn_split_xy.
+// Call this before nn_free_dataset (pass ds.num_rows before it is cleared).
+void         nn_free_xy(float **X, float **Y, int num_rows);
 ```
 
 ### Utilities
@@ -213,10 +219,10 @@ void         nn_split_xy(nn_dataset_t *ds, int num_outputs,
 ```c
 // Min-max normalise each feature column in-place.
 // mins and maxs must be pre-allocated arrays of length n_features.
-void normalise(float **X, int n_samples, int n_features, float *mins, float *maxs);
+void nn_normalise(float **X, int n_samples, int n_features, float *mins, float *maxs);
 
 // Return the index of the largest element (for classification output).
-int argmax(const float *v, int n);
+int nn_argmax(const float *v, int n);
 ```
 
 ### Logging

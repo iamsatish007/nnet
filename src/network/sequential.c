@@ -10,6 +10,10 @@ nn_network_t nn_create(int num_sizes, int *sizes, nn_activation_t *activations) 
     nn_network_t nn;
     nn.num_layers = num_sizes - 1;
     nn.layers = (nn_layer_t *)malloc(sizeof(nn_layer_t) * nn.num_layers);
+    if (!nn.layers) {
+        fprintf(stderr, "[nnet] fatal: out of memory (nn_create)\n");
+        exit(EXIT_FAILURE);
+    }
 
     for (int i = 0; i < nn.num_layers; i++) {
         nn.layers[i] = nn_create_layer(sizes[i], sizes[i + 1], activations[i]);
@@ -65,6 +69,10 @@ void nn_backward(nn_network_t *nn, float *inputs, float *expected,
 
     // Temporary buffer for the loss gradient
     float *loss_grad = (float *)malloc(sizeof(float) * out_layer->output_size);
+    if (!loss_grad) {
+        fprintf(stderr, "[nnet] fatal: out of memory (nn_backward)\n");
+        exit(EXIT_FAILURE);
+    }
     nn_loss_grad(out_layer->outputs, expected, loss_grad,
                  out_layer->output_size, loss);
 

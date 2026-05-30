@@ -1,4 +1,5 @@
 #include "nnet/layers/dense.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
@@ -15,6 +16,11 @@ nn_layer_t nn_create_layer(int input_size, int output_size, nn_activation_t act)
     layer.z_values = (float *)malloc(sizeof(float) * output_size);
     layer.outputs  = (float *)malloc(sizeof(float) * output_size);
     layer.deltas   = (float *)malloc(sizeof(float) * output_size);
+    if (!layer.weights || !layer.biases || !layer.z_values ||
+        !layer.outputs || !layer.deltas) {
+        fprintf(stderr, "[nnet] fatal: out of memory (nn_create_layer)\n");
+        exit(EXIT_FAILURE);
+    }
 
     // Xavier / Glorot initialization: range = sqrt(6 / (in + out))
     float limit = sqrtf(6.0f / (input_size + output_size));

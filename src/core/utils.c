@@ -3,7 +3,7 @@
 
 /* ── Helper: column-wise min/max normalisation ────────────────────────── */
 
-void normalise(float **X, int n_samples, int n_features,
+void nn_normalise(float **X, int n_samples, int n_features,
                       float *mins, float *maxs) {
     /* Compute mins and maxs */
     for (int f = 0; f < n_features; f++) {
@@ -27,7 +27,7 @@ void normalise(float **X, int n_samples, int n_features,
 
 /* ── Helper: argmax over a float array ────────────────────────────────── */
 
-int argmax(const float *v, int n) {
+int nn_argmax(const float *v, int n) {
     int best = 0;
     for (int i = 1; i < n; i++)
         if (v[i] > v[best]) best = i;

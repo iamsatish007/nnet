@@ -18,8 +18,8 @@
 
 /* ── Helper Functions ─────────────────────────────────────────────────── */
 
-void normalise(float **X, int n_samples, int n_features, float *mins, float *maxs);
-int argmax(const float *v, int n);
+void nn_normalise(float **X, int n_samples, int n_features, float *mins, float *maxs);
+int  nn_argmax(const float *v, int n);
 void shuffle_pair(float **X, float **Y, int n);
 void print_sep(char c, int width);
 

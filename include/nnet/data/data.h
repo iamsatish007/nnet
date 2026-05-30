@@ -24,4 +24,9 @@ void nn_print_dataset_info(const nn_dataset_t *ds, int max_rows);
 void nn_split_xy(nn_dataset_t *ds, int num_outputs,
                  float ***X, float ***Y, int *input_size, int *output_size);
 
+// Free the X and Y arrays produced by nn_split_xy.
+//   num_rows: the same ds.num_rows value used when calling nn_split_xy.
+//   Must be called before nn_free_dataset if the dataset is also being freed.
+void nn_free_xy(float **X, float **Y, int num_rows);
+
 #endif // NN_DATA_H

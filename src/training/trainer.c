@@ -20,6 +20,10 @@ void nn_train(nn_network_t *nn, float **X, float **Y,
 
     // Index array for optional shuffling
     int *indices = (int *)malloc(sizeof(int) * num_samples);
+    if (!indices) {
+        fprintf(stderr, "[nnet] fatal: out of memory (nn_train)\n");
+        exit(EXIT_FAILURE);
+    }
     for (int i = 0; i < num_samples; i++) indices[i] = i;
 
     for (int epoch = 1; epoch <= config.epochs; epoch++) {

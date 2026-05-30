@@ -38,6 +38,11 @@ nn_dataset_t nn_load_csv(const char *filepath, int has_header) {
     int num_rows = 0;
     int num_cols = 0;
     float **rows = (float **)malloc(sizeof(float *) * capacity);
+    if (!rows) {
+        fprintf(stderr, "[nnet] fatal: out of memory (nn_load_csv)\n");
+        fclose(fp);
+        return ds;
+    }
 
     while (fgets(line, sizeof(line), fp)) {
         // Skip empty lines
@@ -49,6 +54,13 @@ nn_dataset_t nn_load_csv(const char *filepath, int has_header) {
 
         // Parse columns
         float *row = (float *)malloc(sizeof(float) * num_cols);
+        if (!row) {
+            fprintf(stderr, "[nnet] fatal: out of memory (nn_load_csv row)\n");
+            for (int r = 0; r < num_rows; r++) free(rows[r]);
+            free(rows);
+            fclose(fp);
+            return ds;
+        }
         char *token = strtok(line, ",\n\r");
         int col = 0;
         while (token && col < num_cols) {
@@ -59,7 +71,15 @@ nn_dataset_t nn_load_csv(const char *filepath, int has_header) {
         // Grow array if needed
         if (num_rows >= capacity) {
             capacity *= 2;
-            rows = (float **)realloc(rows, sizeof(float *) * capacity);
+            float **tmp = (float **)realloc(rows, sizeof(float *) * capacity);
+            if (!tmp) {
+                fprintf(stderr, "[nnet] fatal: out of memory (nn_load_csv realloc)\n");
+                for (int r = 0; r < num_rows; r++) free(rows[r]);
+                free(rows);
+                fclose(fp);
+                return ds;
+            }
+            rows = tmp;
         }
         rows[num_rows++] = row;
     }
@@ -142,11 +162,28 @@ void nn_split_xy(nn_dataset_t *ds, int num_outputs,
     *output_size = out_cols;
 
     *X = (float **)malloc(sizeof(float *) * ds->num_rows);
+    if (!*X) {
+        fprintf(stderr, "[nnet] fatal: out of memory (nn_split_xy X)\n");
+        exit(EXIT_FAILURE);
+    }
     *Y = (float **)malloc(sizeof(float *) * ds->num_rows);
+    if (!*Y) {
+        fprintf(stderr, "[nnet] fatal: out of memory (nn_split_xy Y)\n");
+        free(*X); *X = NULL;
+        exit(EXIT_FAILURE);
+    }
 
     for (int i = 0; i < ds->num_rows; i++) {
         (*X)[i] = (float *)malloc(sizeof(float) * in_cols);
+        if (!(*X)[i]) {
+            fprintf(stderr, "[nnet] fatal: out of memory (nn_split_xy row)\n");
+            exit(EXIT_FAILURE);
+        }
         (*Y)[i] = (float *)malloc(sizeof(float) * out_cols);
+        if (!(*Y)[i]) {
+            fprintf(stderr, "[nnet] fatal: out of memory (nn_split_xy row)\n");
+            exit(EXIT_FAILURE);
+        }
 
         for (int j = 0; j < in_cols; j++) {
             (*X)[i][j] = ds->rows[i][j];
@@ -155,4 +192,13 @@ void nn_split_xy(nn_dataset_t *ds, int num_outputs,
             (*Y)[i][j] = ds->rows[i][in_cols + j];
         }
     }
+}
+
+void nn_free_xy(float **X, float **Y, int num_rows) {
+    for (int i = 0; i < num_rows; i++) {
+        free(X[i]);
+        free(Y[i]);
+    }
+    free(X);
+    free(Y);
 }
