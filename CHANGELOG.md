@@ -34,6 +34,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and the forma
 - **CMake package config** — `find_package(nnet)` and `nnetConfigVersion.cmake` with `SameMajorVersion` compatibility
 - **Example** — `examples/mlp_xor`: XOR solved with a 2→4→1 MLP
 - NULL-guards on every `malloc`/`realloc` call; fails fast with a clear stderr message on OOM
+- **CONTRIBUTING.md** Added
 
 ### Notes
 - Requires a C99 compiler (gcc or clang) and CMake 3.14+
