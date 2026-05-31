@@ -34,15 +34,6 @@ int nn_argmax(const float *v, int n) {
     return best;
 }
 
-/* ── Helper: Fisher-Yates shuffle on a pointer pair ──────────────────── */
-
-void shuffle_pair(float **X, float **Y, int n) {
-    for (int i = n - 1; i > 0; i--) {
-        int j = rand() % (i + 1);
-        float *tx = X[i]; X[i] = X[j]; X[j] = tx;
-        float *ty = Y[i]; Y[i] = Y[j]; Y[j] = ty;
-    }
-}
 
 /* ── Pretty-print a separator line ───────────────────────────────────── */
 
