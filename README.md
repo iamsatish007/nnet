@@ -29,7 +29,7 @@ include(FetchContent)
 FetchContent_Declare(
     nnet
     GIT_REPOSITORY https://github.com/iamsatish007/nnet.git
-    GIT_TAG        v0.1.0
+    GIT_TAG        v0.2.0
 )
 FetchContent_MakeAvailable(nnet)
 
@@ -37,7 +37,7 @@ add_executable(myapp main.c)
 target_link_libraries(myapp PRIVATE nnet::nnet)
 ```
 
-> **Tip:** Pin to a release tag (e.g. `v0.1.0`) rather than `main` so your build stays reproducible.
+> **Tip:** Pin to a release tag (e.g. `v0.2.0`) rather than `main` so your build stays reproducible.
 
 ### Option 2 — CMake add_subdirectory
 
