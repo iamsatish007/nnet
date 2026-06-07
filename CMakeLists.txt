@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(nnet VERSION 0.1.0 LANGUAGES C)
+project(nnet VERSION 0.2.0 LANGUAGES C)
 
 # ── Standards ────────────────────────────────────────────────────────────────
 set(CMAKE_C_STANDARD 99)

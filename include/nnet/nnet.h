@@ -9,6 +9,5 @@
 #include "layers/dense.h"
 #include "network/sequential.h"
 #include "training/trainer.h"
-#include "data/data.h"
 
 #endif // NNET_H

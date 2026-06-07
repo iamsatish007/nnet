@@ -18,6 +18,22 @@ This project adheres to [Semantic Versioning](https://semver.org/) and the forma
 
 ---
 
+## [0.2.0] — 2026-06-07
+
+### Removed — ⚠️ Breaking
+- **Data module removed** — `nn_load_csv`, `nn_split_xy`, `nn_free_xy`, `nn_free_dataset`, `nn_print_dataset_info`, and the `nn_dataset_t` type have been removed. The library now focuses exclusively on neural network computation. Users should handle data loading and preprocessing in their own application code.
+- Removed `src/data/data.c`, `include/nnet/data/data.h`, and the `#include "data/data.h"` line from the umbrella header `nnet.h`.
+
+### Migration guide
+If you were using the data module, replace calls like:
+```c
+nn_dataset_t ds = nn_load_csv("data.csv", 1);
+nn_split_xy(&ds, 1, &X, &Y, &in, &out);
+```
+with your own CSV parsing or data preparation code. The training API (`nn_train`) is unchanged — it still accepts `float **X` and `float **Y`.
+
+---
+
 ## [0.1.0] — 2026-05-31
 
 ### Added
@@ -43,5 +59,6 @@ This project adheres to [Semantic Versioning](https://semver.org/) and the forma
 - Requires a C99 compiler (gcc or clang) and CMake 3.14+
 - No dependencies beyond the standard math library (`libm`)
 
-[Unreleased]: https://github.com/iamsatish007/nnet/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/iamsatish007/nnet/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/iamsatish007/nnet/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/iamsatish007/nnet/releases/tag/v0.1.0

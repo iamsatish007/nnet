@@ -126,28 +126,6 @@ int main(void) {
 
 ---
 
-## Loading data from CSV
-
-```c
-// Load CSV (1 = skip header row)
-nn_dataset_t ds = nn_load_csv("data/iris.csv", 1);
-nn_print_dataset_info(&ds, 5);
-
-// Split into inputs X and targets Y
-// Last `num_outputs` columns become Y; the rest become X
-float **X, **Y;
-int input_size, output_size;
-nn_split_xy(&ds, 1, &X, &Y, &input_size, &output_size);
-
-// ... train ...
-
-// Free X and Y first (before nn_free_dataset clears num_rows)
-nn_free_xy(X, Y, ds.num_rows);
-nn_free_dataset(&ds);
-```
-
----
-
 ## API reference
 
 ### Network
@@ -198,21 +176,6 @@ void nn_train(nn_network_t *nn, float **X, float **Y,
 | `NN_LOSS_MSE` | Regression |
 | `NN_LOSS_BINARY_CROSS_ENTROPY` | Binary classification (pair with `NN_SIGMOID`) |
 | `NN_LOSS_CROSS_ENTROPY` | Multi-class classification (pair with `NN_SOFTMAX`) |
-
-### Data
-
-```c
-nn_dataset_t nn_load_csv(const char *filepath, int has_header);
-void         nn_free_dataset(nn_dataset_t *ds);
-void         nn_print_dataset_info(const nn_dataset_t *ds, int max_rows);
-void         nn_split_xy(nn_dataset_t *ds, int num_outputs,
-                         float ***X, float ***Y,
-                         int *input_size, int *output_size);
-
-// Free the X and Y arrays allocated by nn_split_xy.
-// Call this before nn_free_dataset (pass ds.num_rows before it is cleared).
-void         nn_free_xy(float **X, float **Y, int num_rows);
-```
 
 ### Utilities
 
